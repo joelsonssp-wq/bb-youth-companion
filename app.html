@@ -1,0 +1,1150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fafaf7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>BB Youth Companion · App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Fraunces:ital,wght@0,600;1,500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ef; --paper:#ffffff; --ink:#16182b; --muted:#6b6e80; --line:#e4e2db;
+  --brand:#3a36c4; --brand-2:#6d5ef0; --accent:#f6b31c; --accent-2:#ff7a45;
+  --ok:#14a37f; --warn:#e2730f; --bad:#d9455f;
+  --soft:#eeedfb; --soft-acc:#fff4d9;
+  --phone:#0e0f1a; --screen:#fafaf7;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121320; --paper:#1b1d2e; --ink:#ecebf5; --muted:#a3a5b8; --line:#2c2f45;
+    --soft:#25264a; --soft-acc:#3a2f14;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121320; --paper:#1b1d2e; --ink:#ecebf5; --muted:#a3a5b8; --line:#2c2f45;
+  --soft:#25264a; --soft-acc:#3a2f14;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Nunito Sans",system-ui,sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:var(--brand)}
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em}
+.mark .bbtile{width:34px;height:34px;border-radius:9px;flex:none}
+.bbtile{display:inline-block;background:#fcef38;border-radius:10px;padding:4px}
+.bbtile svg,.bbsym svg{display:block;width:100%;height:100%}
+.bbsym{display:inline-block}
+.cc .bbmark{width:26px;height:26px}
+.cc.sm .bbmark{width:14px;height:14px}
+.cc .kindrow{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.mark small{display:block;font-weight:600;color:var(--muted);font-size:11.5px;letter-spacing:.02em}
+.tabs{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.tabs button{padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px;color:var(--muted)}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.disclaimer{max-width:1240px;margin:0 auto;padding:0 16px 10px;font-size:12px;color:var(--muted)}
+/* ---------- layout ---------- */
+main{max-width:1240px;margin:0 auto;padding:24px 16px 64px}
+.view{display:none}.view.on{display:block}
+.proto{display:grid;grid-template-columns:220px 390px 1fr;gap:28px;align-items:start}
+@media (max-width:1080px){.proto{grid-template-columns:1fr 390px}.flow{grid-column:1 / -1;order:3}}
+@media (max-width:760px){.proto{grid-template-columns:1fr}.phone-wrap{justify-self:center}}
+.flow h4,.panel h4{margin:0 0 10px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.flow ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+@media (max-width:1080px){.flow ol{flex-direction:row;flex-wrap:wrap}}
+.flow li button{width:100%;text-align:left;padding:7px 10px;border-radius:10px;font-size:14px;display:flex;gap:10px;align-items:center;color:var(--muted)}
+.flow li button b{width:22px;height:22px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:11px;background:var(--paper);border:1px solid var(--line);color:var(--ink)}
+.flow li button.on{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:0 1px 0 var(--line)}
+.flow li button.on b{background:var(--brand);color:#fff;border-color:var(--brand)}
+.flow li button .new{font-size:9.5px;font-weight:800;letter-spacing:.06em;background:var(--accent);color:#16182b;border-radius:6px;padding:1px 5px;margin-left:auto}
+.flow .hint{margin-top:14px;font-size:12.5px;color:var(--muted)}
+/* phone */
+.phone-wrap{position:sticky;top:110px}
+.phone{width:375px;max-width:calc(100vw - 32px);height:760px;background:var(--phone);border-radius:48px;padding:12px;box-shadow:0 30px 60px -25px rgba(20,20,60,.45)}
+.screen{position:relative;height:100%;border-radius:38px;overflow:hidden;background:var(--screen);color:#16182b;display:flex;flex-direction:column}
+.status{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:13px;font-weight:700}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:110px;height:30px;background:#0e0f1a;border-radius:20px;z-index:3}
+.app{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.app::-webkit-scrollbar{display:none}
+.nav{flex:none;height:74px;display:flex;justify-content:space-around;align-items:flex-start;padding-top:10px;border-top:1px solid #ebe9e2;background:#fff}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:#9a9cab;width:62px}
+.nav button svg{width:22px;height:22px}
+.nav button.on{color:var(--brand)}
+.nav .fab{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;display:grid;place-items:center;margin-top:-22px;box-shadow:0 10px 20px -8px var(--brand)}
+.nav .fab svg{width:24px;height:24px}
+/* in-app components */
+.pad{padding:6px 18px 22px}
+.hello{display:flex;justify-content:space-between;align-items:center;margin:4px 0 14px}
+.hello h2{margin:0;font-size:21px;letter-spacing:-.02em}
+.hello p{margin:0;color:#6b6e80;font-size:13px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#fff4d9;display:grid;place-items:center;font-weight:800;color:#a06a00}
+.card{background:#fff;border-radius:18px;padding:14px;border:1px solid #edebe4;margin-bottom:12px}
+.card.dark{background:#16182b;color:#fff;border:0}
+.card.grad{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border:0}
+.card.tap{cursor:pointer;transition:transform .12s}
+.card.tap:active{transform:scale(.985)}
+.lbl{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#8c8ea0}
+.card.dark .lbl,.card.grad .lbl{color:rgba(255,255,255,.7)}
+.big{font-size:27px;font-weight:800;letter-spacing:-.02em;margin:2px 0}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;background:#f1f0ea;font-size:12.5px;font-weight:700;color:#16182b}
+.chip.brand{background:#eeedfb;color:var(--brand)}
+.chip.ok{background:#dff5ee;color:#0d7d60}
+.chip.warn{background:#fff0dc;color:#a8530a}
+.btn{display:block;width:100%;padding:13px;border-radius:14px;background:var(--brand);color:#fff;font-weight:800;font-size:15px;text-align:center}
+.btn.ghost{background:#f1f0ea;color:#16182b}
+.btn.sm{display:inline-block;width:auto;padding:8px 14px;font-size:13px;border-radius:11px}
+.bar{height:8px;border-radius:9px;background:#efede6;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:var(--brand)}
+.mini{font-size:12.5px;color:#6b6e80}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:18px 0 8px}
+.sec h3{margin:0;font-size:15.5px}
+.sec button{font-size:12.5px;font-weight:800;color:var(--brand)}
+.hscroll{display:flex;gap:10px;overflow-x:auto;margin:0 -18px;padding:0 18px 4px;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.hscroll .card{min-width:150px;margin:0}
+.ico{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:17px;flex:none}
+.list .it{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0eee8}
+.list .it:last-child{border-bottom:0}
+.list .it .grow{flex:1;min-width:0}
+.list .it b{display:block;font-size:14px}
+.back{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;margin:2px 0 12px}
+.back svg{width:20px;height:20px}
+.nudge{border-left:4px solid var(--accent);background:#fffaf0}
+.why{font-size:11.5px;color:var(--brand);font-weight:800;margin-top:8px;display:inline-flex;gap:5px;cursor:pointer}
+.whybox{display:none;margin-top:8px;padding:10px;border-radius:12px;background:#f4f3fd;font-size:12.5px;color:#3a3c55}
+.whybox.on{display:block}
+/* toggle */
+.tg{position:relative;width:42px;height:24px;flex:none}
+.tg input{opacity:0;width:0;height:0}
+.tg span{position:absolute;inset:0;border-radius:999px;background:#d9d7cf;transition:.2s;cursor:pointer}
+.tg span:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tg input:checked + span{background:var(--brand)}
+.tg input:checked + span:before{transform:translateX(18px)}
+/* onboarding */
+.ob{padding:18px 20px;display:flex;flex-direction:column;min-height:100%}
+.ob h2{font-family:Fraunces,serif;font-size:27px;line-height:1.15;letter-spacing:-.01em;margin:14px 0 8px}
+.ob p.lead{color:#5c5f73;margin:0 0 18px;font-size:14.5px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px;border-radius:15px;border:1.5px solid #e7e5de;background:#fff;margin-bottom:9px;font-weight:700;font-size:14.5px}
+.opt span.e{font-size:20px}
+.opt.sel{border-color:var(--brand);background:#f4f3fd}
+.dots{display:flex;gap:6px}
+.dots i{width:22px;height:5px;border-radius:5px;background:#e3e1da}
+.dots i.on{background:var(--brand)}
+.spacer{flex:1}
+/* chat */
+.chat{display:flex;flex-direction:column;height:100%}
+.chat-h{display:flex;align-items:center;gap:10px;padding:4px 16px 10px;border-bottom:1px solid #eeece6}
+.lume{width:36px;height:36px;border-radius:12px;background:conic-gradient(from 200deg,var(--brand),var(--brand-2),var(--accent),var(--brand));display:grid;place-items:center;color:#fff;font-weight:800}
+.msgs{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:8px;scrollbar-width:none}
+.msgs::-webkit-scrollbar{display:none}
+.m{max-width:84%;padding:10px 12px;border-radius:16px;font-size:14px;animation:pop .22s ease-out}
+.m.bot{background:#fff;border:1px solid #ecebe4;border-bottom-left-radius:5px;align-self:flex-start}
+.m.me{background:var(--brand);color:#fff;border-bottom-right-radius:5px;align-self:flex-end}
+.m.card-m{background:#16182b;color:#fff;align-self:flex-start;width:84%}
+.typing{align-self:flex-start;background:#fff;border:1px solid #ecebe4;border-radius:16px;padding:12px 14px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#b5b6c4;animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qr{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 10px;justify-content:flex-end}
+.qr button{padding:8px 12px;border-radius:999px;border:1.5px solid var(--brand);color:var(--brand);font-weight:800;font-size:13px;background:#fff}
+.compose{display:flex;gap:8px;padding:8px 12px 12px;border-top:1px solid #eeece6}
+.compose input{flex:1;border:1px solid #e3e1da;border-radius:999px;padding:10px 14px;font:inherit;font-size:14px;background:#fff;color:#16182b}
+.compose button{width:40px;height:40px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center}
+.ring{position:relative;width:96px;height:96px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:26px;font-weight:800}
+input[type=range]{width:100%;accent-color:var(--brand)}
+.toast{position:absolute;left:14px;right:14px;bottom:86px;background:#16182b;color:#fff;padding:12px 14px;border-radius:14px;font-size:13.5px;font-weight:700;transform:translateY(20px);opacity:0;transition:.25s;pointer-events:none;z-index:5}
+.toast.on{transform:none;opacity:1}
+/* ---------- credit card ---------- */
+.cc-stage{display:flex;justify-content:center;padding:6px 0 14px}
+.cc{position:relative;border-radius:18px;color:#fff;overflow:hidden;box-shadow:0 18px 30px -16px rgba(20,20,60,.6);transition:all .35s ease;font-family:"Nunito Sans",sans-serif}
+.cc.h{width:300px;height:189px}
+.cc.v{width:189px;height:300px}
+.cc.sm.h{width:150px;height:95px;border-radius:11px}
+.cc .pat{position:absolute;inset:0;opacity:.28;pointer-events:none}
+.cc .in{position:absolute;inset:0;padding:16px 18px;display:flex;flex-direction:column}
+.cc.sm .in{padding:9px 10px}
+.cc .ctop{display:flex;justify-content:space-between;align-items:flex-start}
+.cc .nick{font-weight:800;font-size:13px;letter-spacing:.02em;opacity:.95}
+.cc .sticker{font-size:24px;line-height:1}
+.cc.sm .sticker{font-size:14px}.cc.sm .nick{font-size:9px}
+.cc .chipc{width:36px;height:27px;border-radius:6px;background:linear-gradient(135deg,#f4d58d,#c9a24a);margin-top:14px;position:relative}
+.cc .chipc:after{content:"";position:absolute;inset:6px 9px;border:1px solid rgba(0,0,0,.25);border-radius:3px}
+.cc.v .chipc{margin-top:20px}
+.cc .num{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:15px;letter-spacing:.08em;margin-top:auto}
+.cc .bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px;gap:8px}
+.cc .holder{font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
+.cc .kind{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.85;text-align:right}
+.cc .nfc{width:18px;height:18px;opacity:.85}
+.cc.v .num{font-size:11px;letter-spacing:.04em;white-space:nowrap}
+.cc.v .bottom{flex-direction:column;align-items:flex-start}
+.cc.v .holder{max-width:100%}
+.cc.sm .num,.cc.sm .chipc,.cc.sm .holder{display:none}
+.cc.sm .bottom{margin-top:auto}
+.cc.frozen{filter:grayscale(1) brightness(.85)}
+.cc .frz{position:absolute;inset:0;display:none;place-items:center;font-weight:800;font-size:14px;letter-spacing:.1em;background:rgba(255,255,255,.18);backdrop-filter:blur(.5px)}
+.cc.frozen .frz{display:grid}
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{width:40px;height:40px;border-radius:12px;border:3px solid transparent;box-shadow:0 0 0 1px #e3e1da}
+.sw.on{border-color:#fff;box-shadow:0 0 0 2px var(--brand)}
+.seg{display:flex;background:#f1f0ea;border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;padding:8px 6px;border-radius:9px;font-size:12.5px;font-weight:800;color:#55576a}
+.seg button.on{background:#fff;color:var(--brand);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.stk{display:flex;flex-wrap:wrap;gap:6px}
+.stk button{width:40px;height:40px;border-radius:12px;background:#f4f3ef;font-size:20px;border:2px solid transparent}
+.stk button.on{border-color:var(--brand);background:#eeedfb}
+.field{width:100%;border:1.5px solid #e3e1da;border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;background:#fff;color:#16182b;margin-top:6px}
+.field:focus{outline:none;border-color:var(--brand)}
+.ctl{margin-bottom:16px}
+.ctl > .lbl{display:block;margin-bottom:8px}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:2px 0 12px}
+.qa button{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11.5px;font-weight:800;color:#3a3c55}
+.qa button span{width:46px;height:46px;border-radius:15px;background:#fff;border:1px solid #edebe4;display:grid;place-items:center;font-size:19px}
+.qa button.on span{background:#16182b;color:#fff;border-color:#16182b}
+/* side panel */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px}
+.panel h2{margin:0 0 6px;font-size:23px;letter-spacing:-.02em}
+.panel .sub{color:var(--muted);margin:0 0 16px}
+.pblock{border-top:1px solid var(--line);padding:14px 0}
+.pblock:last-child{padding-bottom:0}
+.pblock p{margin:0}
+.src{font-size:12px;color:var(--muted);margin-top:6px}
+.kpi{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--soft);color:var(--brand);font-weight:800;font-size:12.5px;margin:3px 4px 0 0}
+:root[data-theme="dark"] .kpi{color:#b9b4ff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .kpi{color:#b9b4ff}}
+.ev{margin-top:10px}
+.ev .n{font-size:20px;font-weight:800;color:var(--accent-2);letter-spacing:-.02em;line-height:1.2}
+/* doc views */
+.doc h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.03em;line-height:1.08;margin:6px 0 10px}
+.doc h1 em{font-family:Fraunces,serif;font-style:italic;font-weight:500;color:var(--brand)}
+:root[data-theme="dark"] .doc h1 em{color:#b9b4ff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .doc h1 em{color:#b9b4ff}}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2)}
+.lede{font-size:17px;color:var(--muted);max-width:760px;margin:0 0 28px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.box h3{margin:0 0 8px;font-size:17px}
+.box p{margin:0;color:var(--muted)}
+.box ul{margin:6px 0 0;padding-left:18px;color:var(--muted)}
+.stat .n{font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat p{margin-top:8px}
+.stage{position:relative;padding-left:56px}
+.stage .num{position:absolute;left:0;top:18px;width:38px;height:38px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}
+.stage.dk .box{background:#16182b;color:#fff;border-color:#16182b}
+.stage.dk .box p{color:#c7c8d6}
+.journey{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.quote{font-family:Fraunces,serif;font-style:italic;font-size:16px;margin:8px 0 0}
+.callout{border-left:4px solid var(--accent);background:var(--soft-acc);border-radius:12px;padding:16px 18px;margin:22px 0}
+.callout b{display:block;margin-bottom:4px}
+table.t{width:100%;border-collapse:collapse;background:var(--paper);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);font-size:14px}
+.t th,.t td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.t th{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:color-mix(in srgb,var(--paper) 85%,var(--bg))}
+.t tr:last-child td{border-bottom:0}
+.scroll-x{overflow-x:auto}
+.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:800}
+.tag.f{background:#ffe4d6;color:#b2420f}.tag.n{background:#e7e6fb;color:#3a36c4}.tag.l{background:#e3f4ee;color:#0d7d60}.tag.p{background:#f0efe9;color:#55576a}
+h2.h{font-size:22px;letter-spacing:-.02em;margin:34px 0 12px}
+.task{display:flex;gap:14px;align-items:flex-start}
+.task .n{font-weight:800;color:var(--brand);font-size:20px;min-width:28px}
+:root[data-theme="dark"] .task .n{color:#b9b4ff}
+.themebtn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+/* ---------- app-only mode ---------- */
+body.apponly{background:#e9e7e0}
+.apponly .top,.apponly .flow,.apponly .panel,.apponly .view:not(#v-proto){display:none!important}
+.apponly main{padding:24px 16px 12px;max-width:none}
+.apponly .proto{display:flex;flex-direction:column;align-items:center;gap:12px}
+.apponly .phone-wrap{position:static}
+.apponly .app-note{display:block;text-align:center;font-size:11.5px;color:#6b6e80;max-width:375px;margin:0 auto 16px}
+.app-note{display:none}
+@media (max-width:520px){
+  body.apponly{background:#fafaf7}
+  .apponly main{padding:0}
+  .apponly .phone{width:100vw;max-width:100vw;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none;background:#fafaf7}
+  .apponly .screen{border-radius:0}
+  .apponly .notch{display:none}
+  .apponly .status{height:calc(10px + env(safe-area-inset-top));padding:0;overflow:hidden;color:transparent}
+  .apponly .nav{height:calc(66px + env(safe-area-inset-bottom))}
+  .apponly .app-note{display:none}
+}
+</style>
+</head>
+<body class="apponly">
+
+<header class="top">
+  <div class="top-in">
+    <div class="mark"><span class="bbtile" aria-label="Banco do Brasil logo">${BB}</span><div>BB Youth Financial Companion<small>Concept prototype · InovaXcelerate FGV × TUM International · Banco do Brasil challenge</small></div></div>
+    <nav class="tabs" id="tabs">
+      <button data-v="proto" class="on">Prototype</button>
+      <button data-v="journey">Journey</button>
+      <button data-v="rationale">Rationale &amp; evidence</button>
+      <button data-v="test">Validation plan</button>
+    </nav>
+    <button class="themebtn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </div>
+  <div class="disclaimer">Concept prototype for internal discussion and usability testing. Screens, amounts, limits and rates are fictitious and illustrative. This is not an official Banco do Brasil product or app.</div>
+</header>
+
+<main>
+<!-- ================= PROTOTYPE ================= -->
+<section class="view on" id="v-proto">
+  <div class="proto">
+    <aside class="flow">
+      <h4>Screen flow</h4>
+      <ol id="flowList"></ol>
+      <p class="hint">Navigate with this list, the phone's bottom bar or by tapping cards. The panel on the right explains why each screen exists.</p>
+    </aside>
+
+    <div class="phone-wrap">
+      <div class="phone"><div class="screen">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●● 5G ▮</span></div>
+        <div class="app" id="app"></div>
+        <nav class="nav" id="nav">
+          <button data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"/></svg>Home</button>
+          <button data-go="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Goals</button>
+          <button data-go="chat"><span class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span></button>
+          <button data-go="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6 15h4"/></svg>Card</button>
+          <button data-go="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</button>
+        </nav>
+        <div class="toast" id="toast"></div>
+      </div></div>
+    </div>
+
+    <aside class="panel" id="panel"></aside>
+    <p class="app-note">Concept prototype · InovaXcelerate FGV × TUM · fictitious data · not an official Banco do Brasil product</p>
+  </div>
+</section>
+
+<!-- ================= JOURNEY ================= -->
+<section class="view doc" id="v-journey">
+  <div class="eyebrow">User journey</div>
+  <h1>From first contact to a <em>lifelong financial companion</em>.</h1>
+  <p class="lede">The three-stage logic comes from the base prototype (Pigtie, presented at TUM): first the person feels heard, then gets concrete guidance, and only then does the app become a weekly habit. Each stage is adapted to the frictions and account-opening triggers found in the group's survey of young Brazilians.</p>
+
+  <div class="journey">
+    <div class="stage"><div class="num">1</div><div class="box">
+      <div class="eyebrow" style="color:var(--muted)">Day 1 · First contact</div>
+      <h3>100% digital onboarding and a first conversation</h3>
+      <p>Profile-based onboarding (student, first job, own business, under 18 with a guardian). No branch visit, no fees on the basic package, plain language. The AI starts by asking, not by selling.</p>
+      <p class="quote">"Honestly, I don't know where to start."</p>
+      <div style="margin-top:12px"><span class="kpi">Activation rate</span><span class="kpi">Time to open account</span><span class="kpi">% starting the chat</span></div>
+    </div></div>
+    <div class="stage"><div class="num">2</div><div class="box">
+      <div class="eyebrow" style="color:var(--muted)">Days 2 to 7 · Engagement</div>
+      <h3>First plan: goal, spending limit, scheduled Pix and a card that feels like theirs</h3>
+      <p>When salary or allowance lands, the AI reacts to the event and proposes a one-tap action. The digital credit card is issued instantly with a starter limit, and the user designs it and sets its controls.</p>
+      <p class="quote">"Now I know what to do with my money."</p>
+      <div style="margin-top:12px"><span class="kpi">Budget/goal usage</span><span class="kpi">Card activation</span><span class="kpi">30-day engagement</span></div>
+    </div></div>
+    <div class="stage dk"><div class="num" style="background:var(--accent);color:#16182b">3</div><div class="box">
+      <div class="eyebrow" style="color:var(--accent)">Ongoing · Life companion</div>
+      <h3>Monthly review, financial health score and life plan</h3>
+      <p>A short weekly touchpoint and an end-of-month review. Products appear when they fit the life stage, always with a "why am I seeing this" explanation. Credit use is coached toward paying the bill in full.</p>
+      <p class="quote">"Everything is under control, and if it isn't, the app tells me."</p>
+      <div style="margin-top:12px"><span class="kpi">90-day engagement</span><span class="kpi">Cohort retention</span><span class="kpi">Product conversion</span><span class="kpi">NPS</span></div>
+    </div></div>
+  </div>
+
+  <h2 class="h">Screen map by stage</h2>
+  <div class="scroll-x"><table class="t">
+    <tr><th>Stage</th><th>Prototype screens</th><th>Pain addressed</th><th>Success signal</th></tr>
+    <tr><td>1 · First contact</td><td>Welcome, Profile, AI chat</td><td>Bureaucracy, physical branches, fear of mistakes</td><td>Account opened and first conversation on the same day</td></tr>
+    <tr><td>2 · Engagement</td><td>Home, Goals, Spending limits, Credit card, Card studio, Invest</td><td>No control over day-to-day spending; not knowing how to start investing; wanting "my own card"</td><td>At least one goal or limit active and card used in week 1</td></tr>
+    <tr><td>3 · Companion</td><td>Financial health, Monthly review, Offers, Family</td><td>Generic, irrelevant offers; a plan that "ages in a drawer"</td><td>Recurring weekly use; bill paid in full; offers accepted with explanation</td></tr>
+  </table></div>
+</section>
+
+<!-- ================= RATIONALE ================= -->
+<section class="view doc" id="v-rationale">
+  <div class="eyebrow">Rationale &amp; evidence</div>
+  <h1>Public-bank trust with a <em>digital-bank experience</em>.</h1>
+  <p class="lede">Group value proposition: for young Brazilians aged 18 to 25 who need a trusted, simple and personalized banking experience, the Youth Financial Companion is an AI-powered app journey that helps them manage money, start investing and access relevant products with less friction.</p>
+
+  <h2 class="h">What the group's survey showed</h2>
+  <div class="grid g4">
+    <div class="box stat"><div class="n">57.5%</div><p>of 13 to 18 year-olds use only a digital bank (n=40).</p></div>
+    <div class="box stat"><div class="n">72.3%</div><p>of cited frictions concentrate on physical branches, fees and bureaucracy (n=83).</p></div>
+    <div class="box stat"><div class="n">0.39</div><p>point trust gap between traditional and digital banks among 13 to 18 year-olds, the smallest in the sample (1 to 5 scale).</p></div>
+    <div class="box stat"><div class="n">75%</div><p>of 13 to 18 year-olds say their parents chose or recommended their current bank.</p></div>
+  </div>
+  <p class="src">Source: "The Future of Finance" survey run by the group (N=83; 40 aged 13 to 18). Convenience sample: percentages guide hypotheses, not population-level inference.</p>
+
+  <div class="callout"><b>Note for the team: age range</b>The value proposition and pilot target 18 to 25, but the survey focused on 13 to 18 and showed the first bank is largely a parents' decision. The prototype handles this with a "Family" module (dependent account opened by the guardian) as an entry point, while the main pilot stays at 18 to 25. The team should decide explicitly whether this module goes into the pilot or a second phase.</div>
+
+  <h2 class="h">Why the credit card is in scope</h2>
+  <div class="grid g3">
+    <div class="box"><h3>A real trigger</h3><p>13.3% of respondents opened their first account because they "wanted my own card to buy something". The card is a tangible reason to choose a bank, not just a feature.</p></div>
+    <div class="box"><h3>Personalization people can see</h3><p>The case deck lists personalized experience and smart product recommendations as core gains. Designing your own digital card is the most visible, low-cost form of personalization.</p></div>
+    <div class="box"><h3>Responsible credit by design</h3><p>A starter limit, a personal spending cap below the approved limit, auto-pay in full by default and AI nudges on utilization. Limits and approval depend on the bank's credit policy, to be defined with Risk.</p></div>
+  </div>
+
+  <h2 class="h">How each principle becomes a screen</h2>
+  <div class="grid g3">
+    <div class="box"><h3>Proactive and personalized</h3><p>The AI reacts to events (salary landed, spending above limit, bill due soon) and suggests the next best action in one tap.</p><ul><li>AI chat</li><li>Home insights</li><li>Card studio</li><li>Monthly review</li></ul></div>
+    <div class="box"><h3>Frictionless and conversational</h3><p>Young users ask in natural language instead of hunting through menus. Account and card in minutes, no branch, no fees on basic services.</p><ul><li>Welcome and Profile</li><li>Spending limits</li><li>Instant digital card</li></ul></div>
+    <div class="box"><h3>Trustworthy and transparent</h3><p>Every recommendation shows "why am I seeing this", the data used and a way to decline. Trust is the asset the incumbent still has.</p><ul><li>Personalized offers</li><li>Card controls (freeze, caps)</li><li>Privacy and data</li></ul></div>
+  </div>
+
+  <h2 class="h">What we adapted from the base prototype (Pigtie)</h2>
+  <div class="scroll-x"><table class="t">
+    <tr><th>Pigtie element</th><th>How it appears here</th><th>Difference for the BB case</th></tr>
+    <tr><td>AI coach in chat, "guidance, not another dashboard"</td><td>Conversational assistant as the central app button</td><td>Runs on the bank's own data and, with consent, Open Finance data</td></tr>
+    <tr><td>Financial health score with coach feedback</td><td>Score with 4 dimensions and next steps</td><td>Weights and scale must be defined and validated with real data</td></tr>
+    <tr><td>Limits widget</td><td>Category limits with alerts before overspending</td><td>Linked to Pix, debit and the new credit card</td></tr>
+    <tr><td>Journey first chat → follow-up → companion</td><td>The three stages in the Journey tab</td><td>Includes account-opening triggers (allowance, first job, own card)</td></tr>
+    <tr><td>Distribution via employer (EFW) or embedded in a banking app</td><td>Embedded in the bank's app as a youth journey</td><td>Extra channels to test: universities, internship programs and parents</td></tr>
+  </table></div>
+
+  <h2 class="h">Integration options to discuss</h2>
+  <div class="grid g3">
+    <div class="box"><span class="tag n">Recommended for pilot</span><h3 style="margin-top:10px">Embedded in the current app</h3><p>Youth journey inside the existing app, reusing login, products and customer base. Lower acquisition cost, higher dependency on the IT roadmap.</p></div>
+    <div class="box"><span class="tag p">Alternative</span><h3 style="margin-top:10px">Separate youth app or brand</h3><p>More freedom in language and design. Requires its own acquisition and may dilute brand trust, which is the differentiator.</p></div>
+    <div class="box"><span class="tag p">Complementary</span><h3 style="margin-top:10px">Conversational channel (WhatsApp)</h3><p>The AI also talks where young people already are, with sensitive actions completed in the app. Good for nudges and reminders.</p></div>
+  </div>
+</section>
+
+<!-- ================= TEST ================= -->
+<section class="view doc" id="v-test">
+  <div class="eyebrow">Validation plan</div>
+  <h1>First prove young people <em>want it and use it</em>, then build.</h1>
+  <p class="lede">The main blocker identified by the group is the lack of validated evidence that young customers actually want and would use the companion. This prototype exists to unblock that: usability tests with 5 to 8 young people per round before any investment in development.</p>
+
+  <h2 class="h">Usability test script (30 to 40 min per person)</h2>
+  <div class="grid g2">
+    <div class="box task"><div class="n">1</div><div><h3>Open the account</h3><p>"You just got an internship. Open your account and tell me what you think." Watch for hesitation, unclear terms and time to complete.</p></div></div>
+    <div class="box task"><div class="n">2</div><div><h3>Ask the AI for help</h3><p>"Your salary just landed and you want to save for a trip. Use the app." Check whether they find the chat on their own and accept the suggestion.</p></div></div>
+    <div class="box task"><div class="n">3</div><div><h3>Control spending</h3><p>"You think you're spending too much on delivery. What would you do?" Check whether they find Limits and understand the alert.</p></div></div>
+    <div class="box task"><div class="n">4</div><div><h3>Design your card</h3><p>"Make this card yours." Observe which options they use, how long they spend and whether they set a spending cap or turn off international purchases.</p></div></div>
+    <div class="box task"><div class="n">5</div><div><h3>Understand the bill</h3><p>"Your card bill is due soon. What does the app recommend and why?" Ask them to explain interest and paying in full in their own words.</p></div></div>
+    <div class="box task"><div class="n">6</div><div><h3>First investment</h3><p>"You have R$ 100 left over each month. What does the app suggest?" Ask them to explain liquidity and risk in their own words.</p></div></div>
+    <div class="box task"><div class="n">7</div><div><h3>Trust an offer</h3><p>"Why is the app showing you this offer?" Test whether the explanation increases or reduces trust.</p></div></div>
+    <div class="box task"><div class="n">8</div><div><h3>Wrap-up</h3><p>Would you use it weekly? Would you switch from your current app? How likely are you to recommend it (0 to 10)? What would you remove?</p></div></div>
+  </div>
+
+  <h2 class="h">Hypotheses and decision criteria</h2>
+  <div class="scroll-x"><table class="t">
+    <tr><th>Hypothesis</th><th>How to measure in the test</th><th>Suggested go criterion</th></tr>
+    <tr><td>Young people prefer conversational guidance to another dashboard</td><td>Task 2: finds the chat unaided and accepts the suggestion</td><td>Most participants complete without help</td></tr>
+    <tr><td>100% digital onboarding removes the main barrier</td><td>Task 1: time and drop-off points</td><td>No critical blocker; questions resolved on screen</td></tr>
+    <tr><td>Card personalization increases attachment and activation</td><td>Task 4: engagement with the studio; stated intent to use the card</td><td>Most participants customize at least two elements and say they would use it</td></tr>
+    <tr><td>Card controls and coaching support responsible credit use</td><td>Tasks 4 and 5: sets a cap; explains paying in full correctly</td><td>Participant describes interest and minimum payment risk correctly</td></tr>
+    <tr><td>Plain language builds confidence to invest</td><td>Task 6: explanation in their own words</td><td>Participant describes risk and liquidity correctly</td></tr>
+    <tr><td>Transparency in offers increases trust</td><td>Task 7: rating before and after seeing the "why"</td><td>Stated trust does not drop after the explanation</td></tr>
+  </table></div>
+  <p class="src">Criteria are initial suggestions for team discussion; adjust with UX Research, Analytics and Credit Risk before the first round.</p>
+
+  <h2 class="h">Implementation plan (Innovation Sprint)</h2>
+  <div class="scroll-x"><table class="t">
+    <tr><th>Workstream</th><th>Owner</th><th>Timing</th></tr>
+    <tr><td>Validate the hypothesis with customers</td><td>Product and design teams (Joelson)</td><td><span class="tag f">Do first</span></td></tr>
+    <tr><td>Prototype the solution/journey</td><td>Product and design teams (Julierme)</td><td><span class="tag n">Do next</span></td></tr>
+    <tr><td>Test the solution proposal with customers</td><td>Product and design teams (Joelson)</td><td><span class="tag n">Do next</span></td></tr>
+    <tr><td>Develop the solution/journey</td><td>Product and IT teams (Julierme)</td><td><span class="tag n">Do next</span></td></tr>
+    <tr><td>Customize products for youth customers</td><td>Product team (Joelson)</td><td><span class="tag p">In parallel</span></td></tr>
+    <tr><td>Create marketing campaign</td><td>Marketing team (Eduardo)</td><td><span class="tag n">Do next, after the above</span></td></tr>
+    <tr><td>Launch</td><td>Marketing team (Eduardo)</td><td><span class="tag l">Do last</span></td></tr>
+    <tr><td>Monitoring</td><td>Product team</td><td><span class="tag p">Permanent, after launch</span></td></tr>
+  </table></div>
+
+  <h2 class="h">Resources and sponsorship needed</h2>
+  <div class="grid g3">
+    <div class="box"><h3>Executive sponsorship</h3><p>Sales, Investment and Technology Development executives to prioritize the initiative and allocate budget. Needed before customer research.</p></div>
+    <div class="box"><h3>Access to young customers</h3><p>Customer Experience, CRM and Branch Network teams for interviews, surveys and usability tests.</p></div>
+    <div class="box"><h3>Data, integration and credit policy</h3><p>Customer and transaction data (Data &amp; Analytics), integration with account, card, credit and investments (Technology, Data &amp; AI) and a starter-limit policy for young customers (Credit Risk).</p></div>
+  </div>
+  <div class="callout"><b>What we cannot move without</b>Executive sponsorship and access to young customers to validate their needs before investing in the solution.</div>
+  <p class="src">Internal sources: "InovaXcelerate · Innovation Sprint" spreadsheet (Banco do Brasil tab) and the "Young Customers &amp; Digital Banks" case deck. Credit Risk was added to the resources list because of the card scope.</p>
+</section>
+</main>
+
+<script>
+/* ============ Banco do Brasil symbol (vector) ============ */
+const BB_PATHS='<path d="M96.396 16.925l-78.85 52.85 32.819 21.311L89.577 64.66 74.023 54.443l21.305-14.274 46.231 30.679-75.845 50.918 16.405 10.865 94.379-62.848-.213-.213-79.889-52.645zM175.027 16.947l-32.808 21.731 16.404 11.078 16.404-11.078V16.947zM17.005 175.832l32.809-21.73-16.404-11.079-16.405 11.079v21.73z"/><path d="M96.36 175.787l78.849-52.851-32.818-21.311-39.211 26.426 15.552 10.217-21.304 14.275-46.231-30.68 75.844-50.917-16.404-10.866-94.38 62.848.213.215 79.89 52.644z"/>';
+const bbSvg=(color='#003da4')=>`<svg viewBox="0 0 192.756 192.756" fill="${color}" fill-rule="evenodd" clip-rule="evenodd" aria-hidden="true">${BB_PATHS}</svg>`;
+const BB=bbSvg();
+document.querySelectorAll('.mark .bbtile').forEach(e=>e.innerHTML=BB);
+
+/* ============ state ============ */
+const S = {
+  screen:'welcome', profile:null, objective:null, name:'Ana', surname:'Souza',
+  goals:[
+    {id:'trip',e:'✈️',name:'Trip with friends',cur:660,target:1920,by:'Jul 2027'},
+    {id:'safety',e:'🛟',name:'Emergency fund',cur:1250,target:3000,by:'Dec 2027'},
+    {id:'laptop',e:'💻',name:'New laptop',cur:410,target:3500,by:'Mar 2028'}
+  ],
+  chatLog:[], chatStep:'start', invest:{mo:100,yrs:3},
+  card:{theme:'bb',pattern:'waves',orient:'h',sticker:'✦',nick:'My first card',holder:'ANA SOUZA',
+        frozen:false,reveal:false,cap:600,online:true,intl:false,contactless:true,autopay:true,roundup:true}
+};
+const APPROVED = 1500;               // illustrative starter limit
+const PROFILES = {
+  student:{e:'🎓',t:"I'm at university",ins:'Your internship stipend just landed: R$ 1,200. Want to set some aside before spending?',inc:'Internship stipend',amt:'R$ 1,200'},
+  job:{e:'💼',t:'I just started working',ins:'Your first salary just landed: R$ 2,150. Want to build your plan in 2 minutes?',inc:'Salary',amt:'R$ 2,150'},
+  biz:{e:'🚀',t:'I run my own business',ins:'R$ 1,840 in Pix sales came in this week. Want to separate what is yours from what belongs to the business?',inc:'Pix sales',amt:'R$ 3,900'},
+  minor:{e:'🧒',t:"I'm under 18",ins:'Your allowance arrived: R$ 150. How about saving R$ 30 for your goal?',inc:'Allowance',amt:'R$ 150'}
+};
+const THEMES = {
+  bb:['#fcef38','#ffd21f','#003da4'],
+  indigo:['#3a36c4','#6d5ef0'], sunset:['#ff7a45','#f6b31c'], mint:['#0f8f74','#43d1a6'],
+  midnight:['#0e0f1a','#3b3f5c'], berry:['#b0245a','#ff5c8a'], ocean:['#0b5ea8','#38bdf8'],
+  sand:['#a8865a','#e3c79c'], lime:['#3f6212','#a3e635']
+};
+const PATTERNS = {
+  none:'none',
+  waves:'repeating-radial-gradient(circle at 110% 120%, rgba(255,255,255,.9) 0 2px, transparent 2px 16px)',
+  dots:'radial-gradient(rgba(255,255,255,.95) 1.4px, transparent 1.6px) 0 0/14px 14px',
+  lines:'repeating-linear-gradient(135deg, rgba(255,255,255,.9) 0 2px, transparent 2px 14px)',
+  grid:'linear-gradient(rgba(255,255,255,.8) 1px,transparent 1px) 0 0/18px 18px, linear-gradient(90deg,rgba(255,255,255,.8) 1px,transparent 1px) 0 0/18px 18px'
+};
+const STICKERS = ['✦','🐷','🌊','🎧','⚡','🌱','🎮','🌙','🔥','🍀'];
+const fmt = v => 'R$ ' + Math.round(v).toLocaleString('en-US');
+const fmt2 = v => 'R$ ' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* ============ flow + panel content ============ */
+const FLOW = [
+  {id:'welcome',t:'Welcome'},
+  {id:'profile',t:'Profile & objective'},
+  {id:'home',t:'Home'},
+  {id:'chat',t:'AI chat'},
+  {id:'goals',t:'Goals'},
+  {id:'limits',t:'Spending limits'},
+  {id:'card',t:'Credit card',n:1},
+  {id:'studio',t:'Card studio',n:1},
+  {id:'health',t:'Financial health'},
+  {id:'invest',t:'First investment'},
+  {id:'offers',t:'Offers with "why"'},
+  {id:'review',t:'Monthly review'},
+  {id:'family',t:'Family (entry point)'},
+  {id:'more',t:'Help & privacy'}
+];
+const SRC='Sources: group survey (N=83), group case deck, challenge briefing and the Pigtie base prototype. See the "Rationale & evidence" tab.';
+const PANEL = {
+  welcome:{h:'Welcome',s:'100% digital account opening, no branch visit, no fees on the basic package.',
+    why:'The three most-cited barriers (physical branches, fees and bureaucracy) account for 72.3% of responses. None of them is structural: all can be solved by a digital journey.',
+    ev:[['72.3%','of cited frictions are branches, fees and bureaucracy (n=83)'],['UX > cashback','usability and no fees outweigh rewards as bank selection criteria']],
+    hip:'A simple, direct promise ("no branch, no fees, an AI that guides you") is enough to start account opening.',
+    kpi:['Activation rate','Time to open account']},
+  profile:{h:'Profile & objective',s:'Onboarding by life stage, not by product.',
+    why:'First-account triggers vary: allowance (24.1%), first job (21.7%), receiving Pix from friends (16.9%), wanting my own card (13.3%). Asking about the life stage personalizes from the first screen. Try it: the Home message changes with the selected profile.',
+    ev:[['24.1%','opened their first account because of allowance or money from parents'],['21.7%','opened it because they started working']],
+    hip:'Two questions are enough to produce a first recommendation perceived as relevant.',
+    kpi:['Onboarding completion','Perceived relevance']},
+  home:{h:'Home',s:'Guidance instead of another dashboard.',
+    why:'Young customers need to understand their money today and make better choices tomorrow, without feeling lost. The screen opens with an actionable insight, not a statement. The base prototype puts it as "they want guidance, not another dashboard".',
+    ev:[['Customer job','"Help me manage my money today and make better choices tomorrow, without feeling lost" (case deck)']],
+    hip:'One proactive insight per week increases recurring app use.',
+    kpi:['30/90-day engagement','Insight tap-through rate']},
+  chat:{h:'AI chat',s:'The core of the product: natural-language conversation that turns into action.',
+    why:'The challenge asks how to use AI to understand intent, anticipate needs and recommend the next best action. Tap the quick replies to watch the conversation become a goal with an automatic transfer, or type a question about the card.',
+    ev:[['AI is baseline','in 2026 AI is a requirement, not a differentiator; the edge is experience quality and trust (challenge briefing)']],
+    hip:'Young people prefer resolving things in conversation over navigating menus, and accept a suggested action when it is explained.',
+    kpi:['% starting the chat','Suggestion acceptance','Resolution without a human agent']},
+  goals:{h:'Goals',s:'Concrete objectives with visible progress.',
+    why:'"Build confidence to save and invest" is one of the segment\'s needs. Named goals with deadlines make saving tangible and feed the health score. Card round-ups can flow into a goal.',
+    ev:[['Gain','personalized tips and nudges; rewards for healthy financial habits (case deck)']],
+    hip:'Users who create a goal in week 1 have higher 90-day retention.',
+    kpi:['Goals per user','Active automatic contributions']},
+  limits:{h:'Spending limits',s:'Alerts before overspending, by category.',
+    why:'Controlling day-to-day spending is the segment\'s most immediate need. Inspired by the base prototype\'s "Limits widget", adapted to Pix, debit and credit card spending.',
+    ev:[['Pain','low financial literacy and fear of making mistakes (case deck)']],
+    hip:'Preventive alerts (before overspending) are perceived as help, not as a scolding.',
+    kpi:['Budget feature usage','Categories within limit']},
+  card:{h:'Credit card',s:'An instant digital card with built-in coaching and controls.',
+    why:'Wanting "my own card to buy something" is a real first-account trigger. Here the card is issued digitally with a starter limit, the bill is explained in plain language, and the AI nudges toward paying in full. Freeze, reveal details and the spending cap are one tap away.',
+    ev:[['13.3%','opened their first account because they wanted their own card to buy something (n=83)'],['Pain','fees and unclear product conditions; the offer must explain fees and conditions clearly (case deck)']],
+    hip:'An instant card with clear controls increases activation without increasing delinquency in the young segment.',
+    kpi:['Card activation','First purchase within 7 days','% bills paid in full','Delinquency rate']},
+  studio:{h:'Card studio',s:'Personalize the digital card: look and rules.',
+    why:'Personalization is the core of the value proposition, and the card is the most visible place to show it. Users pick color, pattern, orientation, sticker, nickname and printed name, and set their own rules: personal spending cap, online, international and contactless purchases, auto-pay and round-ups to a goal. Changes appear live in the preview.',
+    ev:[['Gain','"personalized experience" and "relevant rewards and recognition" are listed gains for the segment (case deck)'],['Trust','controls the customer sets themselves reinforce the trust advantage of the incumbent']],
+    hip:'Designing the card increases emotional attachment and activation; self-set caps reduce overspending.',
+    kpi:['% customizing the card','Cap set below approved limit','Card activation','Feature usage (freeze, toggles)']},
+  health:{h:'Financial health',s:'One simple number with clear next steps.',
+    why:'The score summarizes four dimensions, now including responsible credit use, and always comes with what to do next. Scale and weights are illustrative and must be defined and validated with real data.',
+    ev:[['Pigtie','"Financial health score: get feedback from the coach", a live feature in the base prototype']],
+    hip:'A single, explained indicator motivates action better than several charts.',
+    kpi:['Score change','Actions completed from the score']},
+  invest:{h:'First investment',s:'Education before the sale, with a simulator.',
+    why:'Learning to invest and gaining the confidence to start safely are expected gains. The simulator uses an illustrative rate and clearly says it is not a promise of returns.',
+    ev:[['Need','build confidence to save and invest; translate financial language into simple guidance (case deck)']],
+    hip:'A small, explained first step (from R$ 30) unlocks the first investment.',
+    kpi:['First-investment conversion','Product understanding (test)']},
+  offers:{h:'Offers with "why"',s:'Transparent personalization instead of generic pushes.',
+    why:'Generic, irrelevant offers are one of the pains. Trust is still the traditional bank\'s advantage (0.39-point gap among 13 to 18 year-olds), so every offer explains the data used and can be dismissed.',
+    ev:[['0.39','point trust advantage of traditional over digital banks among 13 to 18 year-olds, the smallest in the sample']],
+    hip:'Explaining the recommendation increases conversion without reducing trust.',
+    kpi:['Product conversion','Dismissal rate','Stated trust']},
+  review:{h:'Monthly review',s:'The ritual that turns the app into a companion.',
+    why:'Stage 3 of the journey: a short monthly summary compared with the plan, with a single decision question. It prevents "a plan that ages in a drawer".',
+    ev:[['Every week','"They want it every week, not a plan that ages in a drawer" (base prototype)']],
+    hip:'A short monthly ritual keeps usage beyond 90 days.',
+    kpi:['Cohort retention','Monthly review open rate','NPS']},
+  family:{h:'Family',s:'The guardian as the entry point to the first bank.',
+    why:'75% of 13 to 18 year-olds say their parents chose or recommended their bank. For those who never had a traditional bank, this is not churn: it is a missing first touch. This module is outside the 18 to 25 pilot range and is a decision for the team.',
+    ev:[['75%','of 13 to 18 year-olds: parents chose or recommended their current bank (vs. 59% in the full sample)'],['57.5%','of 13 to 18 year-olds use only a digital bank']],
+    hip:'Offering a dependent account with Pix allowance to existing customers creates the first touch with the young person.',
+    kpi:['Dependent accounts opened','Conversion to own account at 18']},
+  more:{h:'Help & privacy',s:'Fast support and control over personal data.',
+    why:'Slow support and app friction are among the pains; stability and security are the foundation of trust. Users control what data the AI may use (including Open Finance, always with consent, in line with LGPD).',
+    ev:[['Trust','"Stability, security and clear support are the foundation of trust" (challenge briefing)']],
+    hip:'Visible control over data increases willingness to share data for personalization.',
+    kpi:['Support CSAT','Open Finance consents']}
+};
+
+/* ============ helpers ============ */
+const app = document.getElementById('app');
+const nav = document.getElementById('nav');
+const toastEl = document.getElementById('toast');
+function toast(t){toastEl.textContent=t;toastEl.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>toastEl.classList.remove('on'),2200)}
+const backBtn = (to,label='Back') => `<button class="back" data-go="${to}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>${label}</button>`;
+function ring(v,size=96,stroke=10,color='var(--brand)'){
+  const r=(size-stroke)/2,c=2*Math.PI*r,off=c*(1-v/100);
+  return `<svg width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="#efede6" stroke-width="${stroke}" fill="none"/><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="${color}" stroke-width="${stroke}" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"/></svg>`;
+}
+const prof = () => PROFILES[S.profile||'job'];
+const tg = (key,label,sub) => `<div class="it"><div class="grow"><b>${label}</b><span class="mini">${sub}</span></div><label class="tg"><input type="checkbox" data-cardtg="${key}" ${S.card[key]?'checked':''}><span></span></label></div>`;
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* card renderer */
+function cardHTML(opts={}){
+  const c=S.card, [a,b,ink]=THEMES[c.theme]; const fg=ink||'#fff';
+  const size=opts.small?' sm':'';
+  const orient=opts.small?'h':c.orient;
+  const num=c.reveal?'1234 5678 9012 4821':'•••• •••• •••• 4821';
+  return `<div class="cc ${orient}${size} ${c.frozen?'frozen':''}" id="${opts.id||''}" style="background:linear-gradient(135deg,${a},${b});color:${fg}">
+    <div class="pat" style="background:${PATTERNS[c.pattern]};${ink?'filter:invert(1);opacity:.12':''}"></div>
+    <div class="in">
+      <div class="ctop"><span class="nick">${esc(c.nick||' ')}</span><span class="sticker">${c.sticker}</span></div>
+      <div class="chipc"></div>
+      <div class="num">${num}</div>
+      <div class="bottom"><span class="holder">${esc(c.holder||' ')}</span><span class="kind"><span class="kindrow"><span class="bbsym bbmark">${bbSvg(fg)}</span></span>credit · debit <svg class="nfc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 8.5a5 5 0 010 7M12 6a8.5 8.5 0 010 12M15.5 3.5a12 12 0 010 17"/></svg></span></div>
+    </div>
+    <div class="frz">❄ FROZEN</div>
+  </div>`;
+}
+
+/* ============ screens ============ */
+const SCREENS = {
+welcome(){
+  return `<div class="ob">
+    <div class="dots"><i class="on"></i><i></i><i></i></div>
+    <div class="row" style="margin-top:22px;gap:12px"><span class="bbtile" style="width:52px;height:52px;border-radius:14px;padding:7px">${BB}</span><div><b style="font-size:15px">Banco do Brasil</b><div class="mini">Youth Financial Companion</div></div></div>
+    <h2>Your money, your way. With someone who knows the subject on your side.</h2>
+    <p class="lead">Open your account on your phone in minutes, get a digital card you design yourself, pay no fees on the basic package and get weekly guidance from an AI.</p>
+    <div class="card" style="display:flex;flex-direction:column;gap:10px">
+      <div class="row"><span class="ico" style="background:#eeedfb">📱</span><span style="font-weight:700;font-size:14px">No branch visit</span></div>
+      <div class="row"><span class="ico" style="background:#dff5ee">0</span><span style="font-weight:700;font-size:14px">No fees on the basic package</span></div>
+      <div class="row"><span class="ico" style="background:#ffe9e1">💳</span><span style="font-weight:700;font-size:14px">Instant digital card, designed by you</span></div>
+      <div class="row"><span class="ico" style="background:#fff4d9">✦</span><span style="font-weight:700;font-size:14px">Personalized guidance, no jargon</span></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" data-go="profile">Get started</button>
+    <button class="btn ghost" style="margin-top:8px" data-go="home">I already have an account</button>
+  </div>`;
+},
+profile(){
+  if(!S.profile){
+    return `<div class="ob">
+      <div class="dots"><i class="on"></i><i class="on"></i><i></i></div>
+      <h2>Where are you in life right now?</h2>
+      <p class="lead">So we start by talking about what matters to you.</p>
+      ${Object.entries(PROFILES).map(([k,p])=>`<button class="opt" data-profile="${k}"><span class="e">${p.e}</span>${p.t}</button>`).join('')}
+      <div class="spacer"></div>
+      <p class="mini" style="text-align:center">You can change this later.</p>
+    </div>`;
+  }
+  const objs=[['🧭','Get control of my spending','ctrl'],['🎯','Save up for something','save'],['📈','Start investing','inv'],['💳','Get my own card','card'],['🛟','Build a safety net','safety']];
+  return `<div class="ob">
+    <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    <h2>And what do you want to sort out first?</h2>
+    <p class="lead">Pick one. The AI builds the first step with you.</p>
+    ${objs.map(o=>`<button class="opt ${S.objective===o[2]?'sel':''}" data-obj="${o[2]}"><span class="e">${o[0]}</span>${o[1]}</button>`).join('')}
+    <div class="spacer"></div>
+    <button class="btn" data-go="${S.objective==='card'?'studio':'home'}" ${S.objective?'':'style="opacity:.45;pointer-events:none"'}>${S.objective==='card'?'Open account and design my card':'Open my account'}</button>
+    <button class="btn ghost" style="margin-top:8px" data-reset-profile>Back</button>
+  </div>`;
+},
+home(){
+  const p=prof(), g=S.goals[0];
+  return `<div class="pad">
+    <div class="hello"><div class="row" style="gap:10px"><span class="bbtile" style="width:38px;height:38px;padding:5px">${BB}</span><div><p>Good afternoon,</p><h2>${S.name} 👋</h2></div></div><div class="avatar">${S.name[0]}</div></div>
+    <div class="card grad tap" data-go="chat">
+      <div class="lbl">✦ Your AI noticed</div>
+      <div style="font-weight:800;font-size:16px;margin:6px 0 10px">${p.ins}</div>
+      <span class="chip" style="background:rgba(255,255,255,.2);color:#fff">Talk now →</span>
+    </div>
+    <div class="card">
+      <div class="row between"><div><div class="lbl">Available balance</div><div class="big">R$ 2,384</div></div><span class="chip ok">Pix ✓</span></div>
+      <div class="row" style="gap:8px;margin-top:10px">
+        <button class="btn sm" onclick="toast('Pix flow is out of scope for this prototype')">Pix</button>
+        <button class="btn sm ghost" onclick="toast('Statement is out of scope for this prototype')">Statement</button>
+        <button class="btn sm ghost" data-go="card">Card</button>
+      </div>
+    </div>
+    <div class="card tap" data-go="card" style="display:flex;gap:12px;align-items:center">
+      ${cardHTML({small:true})}
+      <div style="flex:1;min-width:0"><div class="lbl">Credit card</div><div style="font-weight:800;font-size:15px;margin:3px 0">Bill ${fmt2(486.30)}</div><div class="mini">Due Nov 10 · auto-pay in full ${S.card.autopay?'on':'off'}</div></div>
+    </div>
+    <div class="row" style="gap:10px">
+      <div class="card tap" style="flex:1" data-go="health">
+        <div class="lbl">Financial health</div>
+        <div class="row" style="margin-top:6px"><div style="position:relative;width:52px;height:52px">${ring(62,52,7,'var(--ok)')}<b style="position:absolute;inset:0;display:grid;place-items:center;font-size:15px">62</b></div><span class="mini">+4 this month</span></div>
+      </div>
+      <div class="card tap" style="flex:1" data-go="limits">
+        <div class="lbl">Limits</div>
+        <div style="font-weight:800;margin:6px 0 4px">Delivery 86%</div>
+        <div class="bar"><i style="width:86%;background:var(--warn)"></i></div>
+        <div class="mini" style="margin-top:4px">R$ 42 left</div>
+      </div>
+    </div>
+    <div class="sec"><h3>Your goals</h3><button data-go="goals">See all</button></div>
+    <div class="card tap" data-go="goals">
+      <div class="row between"><div class="row"><span class="ico" style="background:#eeedfb">${g.e}</span><div><b style="font-size:14px">${g.name}</b><div class="mini">${fmt(g.cur)} of ${fmt(g.target)}</div></div></div><b>${Math.round(g.cur/g.target*100)}%</b></div>
+      <div class="bar" style="margin-top:10px"><i style="width:${g.cur/g.target*100}%"></i></div>
+    </div>
+    <div class="sec"><h3>For you</h3><button data-go="offers">Why do I see this?</button></div>
+    <div class="hscroll">
+      <div class="card tap" data-go="studio"><span class="ico" style="background:#ffe9e1">🎨</span><b style="display:block;margin-top:8px;font-size:14px">Design your card</b><span class="mini">colors, sticker, rules</span></div>
+      <div class="card tap" data-go="invest"><span class="ico" style="background:#dff5ee">📈</span><b style="display:block;margin-top:8px;font-size:14px">First investment</b><span class="mini">from R$ 30</span></div>
+      <div class="card tap" data-go="review"><span class="ico" style="background:#fff4d9">🗓️</span><b style="display:block;margin-top:8px;font-size:14px">October review</b><span class="mini">2 min</span></div>
+      <div class="card tap" data-go="family"><span class="ico" style="background:#eeedfb">👪</span><b style="display:block;margin-top:8px;font-size:14px">Family mode</b><span class="mini">allowance via Pix</span></div>
+    </div>
+  </div>`;
+},
+chat(){
+  return `<div class="chat">
+    <div class="chat-h"><div class="lume">✦</div><div><b>Your financial AI</b><div class="mini">personalized guidance · answers in seconds</div></div></div>
+    <div class="msgs" id="msgs"></div>
+    <div class="qr" id="qr"></div>
+    <div class="compose"><input id="cin" placeholder="Ask in your own words…"><button id="csend" aria-label="Send">➤</button></div>
+  </div>`;
+},
+goals(){
+  return `<div class="pad">
+    ${backBtn('home')}
+    <h2 style="margin:0 0 4px;font-size:22px">Your goals</h2>
+    <p class="mini" style="margin:0 0 14px">Automatic contributions via scheduled Pix on the day your money lands, plus card round-ups.</p>
+    ${S.goals.map(g=>`<div class="card">
+      <div class="row between"><div class="row"><span class="ico" style="background:#eeedfb">${g.e}</span><div><b style="font-size:14px">${g.name}</b><div class="mini">by ${g.by}${g.id==='trip'&&S.card.roundup?' · 💳 round-ups on':''}</div></div></div><b>${Math.round(g.cur/g.target*100)}%</b></div>
+      <div class="bar" style="margin:10px 0 6px"><i style="width:${Math.min(100,g.cur/g.target*100)}%"></i></div>
+      <div class="row between mini"><span>${fmt(g.cur)} of ${fmt(g.target)}</span><button style="font-weight:800;color:var(--brand)" data-add="${g.id}">+ R$ 50</button></div>
+    </div>`).join('')}
+    <div class="card nudge"><b style="font-size:14px">AI tip</b><div class="mini" style="margin-top:4px">If you set aside R$ 160 a month, your trip is funded one month early.${S.card.roundup?' Card round-ups added R$ 23.40 this month.':''}</div></div>
+    <button class="btn" data-newgoal>Create a new goal</button>
+  </div>`;
+},
+limits(){
+  const cats=[['🍔','Delivery',258,300,'#e2730f'],['🚌','Transport',96,180,'#3a36c4'],['🎮','Fun & games',120,200,'#6d5ef0'],['👕','Clothes',40,150,'#14a37f'],['📱','Subscriptions',62,70,'#d9455f']];
+  return `<div class="pad">
+    ${backBtn('home')}
+    <h2 style="margin:0 0 4px;font-size:22px">October limits</h2>
+    <p class="mini" style="margin:0 0 14px">You decide how much to spend across Pix, debit and credit. The AI warns you before you overspend, not after.</p>
+    <div class="card dark"><div class="lbl">Spent this month</div><div class="big">R$ 576 <span style="font-size:14px;opacity:.7">of R$ 900</span></div><div class="bar" style="background:rgba(255,255,255,.15)"><i style="width:64%;background:var(--accent)"></i></div><div style="font-size:12.5px;opacity:.75;margin-top:6px">16 days left · on track with your plan</div></div>
+    <div class="card list">
+      ${cats.map(c=>{const pc=Math.round(c[2]/c[3]*100);return `<div class="it"><span class="ico" style="background:#f4f3ef">${c[0]}</span><div class="grow"><div class="row between"><b>${c[1]}</b><span class="mini">${fmt(c[2])} / ${fmt(c[3])}</span></div><div class="bar" style="margin-top:6px"><i style="width:${Math.min(pc,100)}%;background:${pc>=85?'var(--warn)':c[4]}"></i></div></div></div>`}).join('')}
+    </div>
+    <div class="card nudge"><b style="font-size:14px">⚠️ Delivery at 86%</b><div class="mini" style="margin:4px 0 8px">Over the last 3 weeks, spending spiked on Friday nights. Want a reminder at 7 pm on Fridays?</div><button class="btn sm" onclick="toast('Reminder set for Fridays at 7 pm')">Yes, remind me</button></div>
+  </div>`;
+},
+card(){
+  const c=S.card, used=486.30, util=Math.round(used/APPROVED*100);
+  return `<div class="pad">
+    ${backBtn('home')}
+    <div class="row between" style="margin-bottom:4px"><h2 style="margin:0;font-size:22px">Your card</h2><span class="chip ${c.frozen?'warn':'ok'}">${c.frozen?'Frozen':'Active'}</span></div>
+    <div class="cc-stage">${cardHTML()}</div>
+    <div class="qa">
+      <button data-cardact="freeze" class="${c.frozen?'on':''}"><span>❄</span>${c.frozen?'Unfreeze':'Freeze'}</button>
+      <button data-cardact="reveal" class="${c.reveal?'on':''}"><span>👁</span>${c.reveal?'Hide':'Details'}</button>
+      <button data-go="studio"><span>🎨</span>Customize</button>
+      <button data-cardact="virtual"><span>➕</span>Virtual card</button>
+    </div>
+    <div class="card">
+      <div class="row between"><div><div class="lbl">Current bill</div><div class="big">${fmt2(used)}</div><div class="mini">Closes Nov 3 · due Nov 10</div></div>
+      <div style="text-align:right"><div class="lbl">Available</div><div style="font-weight:800;font-size:17px">${fmt(Math.min(c.cap,APPROVED)-used)}</div><div class="mini">of your ${fmt(c.cap)} cap</div></div></div>
+      <div class="bar" style="margin:12px 0 6px"><i style="width:${util}%;background:${util>30?'var(--warn)':'var(--ok)'}"></i></div>
+      <div class="row between mini"><span>${util}% of approved limit (${fmt(APPROVED)})</span><span>${c.autopay?'Auto-pay in full ✓':'Auto-pay off'}</span></div>
+    </div>
+    <div class="card dark">
+      <div class="lbl" style="color:var(--accent)">✦ AI coach</div>
+      <div style="font-weight:800;margin:6px 0">Paying the full bill keeps you at zero interest and builds your credit history.</div>
+      <div style="font-size:13px;opacity:.8;margin-bottom:10px">Paying only the minimum would turn this bill into revolving credit with high interest. You have ${fmt(2384)} in your account, enough to pay in full on the 10th.</div>
+      <div class="why" style="color:var(--accent)" data-why="cc">ⓘ How is my limit calculated?</div>
+      <div class="whybox" id="why-cc" style="background:rgba(255,255,255,.08);color:#e6e6f0">Illustrative starter limit based on income landing in this account and your payment history. It grows as you pay bills on time. Your personal cap (${fmt(c.cap)}) is set by you in the card studio and is never exceeded.</div>
+    </div>
+    <div class="sec"><h3>Recent purchases</h3><button onclick="toast('Full statement is out of scope for this prototype')">See all</button></div>
+    <div class="card list">
+      <div class="it"><span class="ico" style="background:#fff0dc">🍔</span><div class="grow"><b>Food delivery</b><span class="mini">Today · round-up R$ 0.60 → Trip</span></div><b>R$ 39.40</b></div>
+      <div class="it"><span class="ico" style="background:#eeedfb">🎧</span><div class="grow"><b>Music streaming</b><span class="mini">Oct 12 · virtual card</span></div><b>R$ 21.90</b></div>
+      <div class="it"><span class="ico" style="background:#dff5ee">📚</span><div class="grow"><b>University bookstore</b><span class="mini">Oct 9 · 2 of 3 installments, no interest</span></div><b>R$ 89.00</b></div>
+      <div class="it"><span class="ico" style="background:#f4f3ef">🚌</span><div class="grow"><b>Public transport</b><span class="mini">Oct 8 · contactless</span></div><b>R$ 5.00</b></div>
+    </div>
+  </div>`;
+},
+studio(){
+  const c=S.card;
+  return `<div class="pad">
+    ${backBtn('card','Your card')}
+    <h2 style="margin:0 0 2px;font-size:22px">Card studio</h2>
+    <p class="mini" style="margin:0">Make it yours. Every change shows up live.</p>
+    <div class="cc-stage" id="ccPreview" style="min-height:${c.orient==='v'?'318px':'208px'};align-items:center">${cardHTML()}</div>
+    <div class="seg" style="margin-bottom:16px" id="studioTabs">
+      <button data-stab="look" class="${(S.stab||'look')==='look'?'on':''}">Look</button>
+      <button data-stab="text" class="${S.stab==='text'?'on':''}">Text</button>
+      <button data-stab="rules" class="${S.stab==='rules'?'on':''}">Rules</button>
+    </div>
+    ${studioTab(S.stab||'look')}
+    <button class="btn" data-savecard>Save my card</button>
+    <button class="btn ghost" style="margin-top:8px" data-resetcard>Reset to default</button>
+  </div>`;
+},
+health(){
+  const dims=[['Spending control',72,'var(--brand)'],['Emergency fund',42,'var(--warn)'],['Goals on track',80,'var(--ok)'],['Responsible credit use',S.card.autopay?85:55,'var(--accent-2)']];
+  return `<div class="pad">
+    ${backBtn('home')}
+    <div class="card" style="text-align:center">
+      <div class="lbl">Financial health</div>
+      <div class="ring" style="margin:12px auto;width:130px;height:130px">${ring(62,130,12,'var(--ok)')}<b style="font-size:36px">62</b></div>
+      <span class="chip ok">+4 since September</span>
+      <p class="mini" style="margin:10px 0 0">Illustrative 0 to 100 index based on 4 dimensions.</p>
+    </div>
+    <div class="card list">${dims.map(d=>`<div class="it"><div class="grow"><div class="row between"><b>${d[0]}</b><span class="mini">${d[1]}</span></div><div class="bar" style="margin-top:6px"><i style="width:${d[1]}%;background:${d[2]}"></i></div></div></div>`).join('')}</div>
+    <div class="card dark">
+      <div class="lbl">✦ Suggested next step</div>
+      <div style="font-weight:800;margin:6px 0">Building your emergency fund is what raises your score the most right now.</div>
+      <div style="font-size:13px;opacity:.8;margin-bottom:10px">R$ 80 a month gets your fund to one month of expenses in about 10 months.</div>
+      <button class="btn sm" style="background:var(--accent);color:#16182b" data-go="chat">Plan it with the AI</button>
+    </div>
+  </div>`;
+},
+invest(){
+  const {mo,yrs}=S.invest,n=yrs*12,i=Math.pow(1.10,1/12)-1,fv=mo*((Math.pow(1+i,n)-1)/i);
+  return `<div class="pad">
+    ${backBtn('home')}
+    <h2 style="margin:0 0 4px;font-size:22px">Your first investment</h2>
+    <p class="mini" style="margin:0 0 14px">Before choosing, understand three ideas. Takes one minute.</p>
+    <div class="hscroll" style="margin-bottom:12px">
+      <div class="card" style="min-width:200px"><span class="ico" style="background:#eeedfb">💧</span><b style="display:block;margin:8px 0 2px;font-size:14px">Liquidity</b><span class="mini">How fast you can get your money back.</span></div>
+      <div class="card" style="min-width:200px"><span class="ico" style="background:#fff4d9">⚖️</span><b style="display:block;margin:8px 0 2px;font-size:14px">Risk</b><span class="mini">How much the value can swing along the way.</span></div>
+      <div class="card" style="min-width:200px"><span class="ico" style="background:#dff5ee">⏳</span><b style="display:block;margin:8px 0 2px;font-size:14px">Time horizon</b><span class="mini">When you will need this money.</span></div>
+    </div>
+    <div class="card">
+      <div class="lbl">Learning simulator</div>
+      <div class="row between" style="margin-top:10px"><span style="font-weight:700">Per month</span><b id="sv-m">${fmt(mo)}</b></div>
+      <input type="range" min="30" max="500" step="10" value="${mo}" id="sl-m">
+      <div class="row between" style="margin-top:6px"><span style="font-weight:700">For how long</span><b id="sv-a">${yrs} ${yrs>1?'years':'year'}</b></div>
+      <input type="range" min="1" max="10" step="1" value="${yrs}" id="sl-a">
+      <div class="row between" style="margin-top:12px;padding-top:12px;border-top:1px solid #f0eee8">
+        <div><div class="mini">You contribute</div><b id="sv-ap">${fmt(mo*n)}</b></div>
+        <div style="text-align:right"><div class="mini">Estimated value</div><b id="sv-fv" style="font-size:20px;color:var(--ok)">${fmt(fv)}</b></div>
+      </div>
+      <p class="mini" style="margin:10px 0 0;font-size:11.5px">Illustrative rate of 10% a year, before taxes. Not a promise of returns; actual returns vary.</p>
+    </div>
+    <div class="card nudge"><b style="font-size:14px">Suggestion for your profile</b><div class="mini" style="margin:4px 0 8px">If you are just starting and may need the money anytime: a fixed-income product with daily liquidity. Safety net first, everything else after.</div><div class="why" data-why="inv">ⓘ Why this suggestion?</div><div class="whybox" id="why-inv">We used: your objective "${S.objective==='inv'?'start investing':'build your financial base'}", your emergency fund at 42% and the fact that you have no investments yet. We do not use data from other institutions without your consent.</div></div>
+    <button class="btn" id="inv-cta" onclick="toast('Product purchase is out of scope for this prototype')">Start with ${fmt(mo)}</button>
+  </div>`;
+},
+offers(){
+  const of=[
+    ['📈','Credit limit review in 3 months','You have paid your card bill in full for 6 months in a row.','Card payment history in this account'],
+    ['🎓','University account perks','You told us you are at university.','Profile you provided at onboarding'],
+    ['🛡️','Phone protection insurance','You bought a phone on your card in August.','Category of a recent card purchase']
+  ];
+  return `<div class="pad">
+    ${backBtn('home')}
+    <h2 style="margin:0 0 4px;font-size:22px">For you</h2>
+    <p class="mini" style="margin:0 0 14px">Few offers, always with the reason. If it doesn't fit, just dismiss it.</p>
+    ${of.map((o,k)=>`<div class="card">
+      <div class="row"><span class="ico" style="background:#eeedfb">${o[0]}</span><b style="font-size:14.5px">${o[1]}</b></div>
+      <div class="mini" style="margin:8px 0 0">${o[2]}</div>
+      <div class="why" data-why="o${k}">ⓘ Why am I seeing this?</div>
+      <div class="whybox" id="why-o${k}"><b>Data used:</b> ${o[3]}.<br>You can turn off this kind of recommendation in More › Privacy.</div>
+      <div class="row" style="gap:8px;margin-top:10px"><button class="btn sm" onclick="toast('Product details are out of scope')">See terms</button><button class="btn sm ghost" data-dismiss>Not interested</button></div>
+    </div>`).join('')}
+  </div>`;
+},
+review(){
+  return `<div class="pad">
+    ${backBtn('home')}
+    <div class="card dark">
+      <div class="lbl" style="color:var(--accent)">Monthly review · September</div>
+      <div style="font-size:20px;font-weight:800;margin:6px 0">You saved R$ 210 more than planned.</div>
+      <div style="font-size:13px;opacity:.8">Want to raise your savings rate from 12% to 15%?</div>
+      <div class="row" style="gap:8px;margin-top:12px"><button class="btn sm" style="background:var(--accent);color:#16182b" onclick="toast('Savings rate set to 15%')">Yes, raise it</button><button class="btn sm" style="background:rgba(255,255,255,.15)" onclick="toast('Kept at 12%')">Keep it</button></div>
+    </div>
+    <div class="card list">
+      <div class="it"><span class="ico" style="background:#dff5ee">⬆️</span><div class="grow"><b>Money in</b><span class="mini">${prof().inc}</span></div><b>${prof().amt}</b></div>
+      <div class="it"><span class="ico" style="background:#ffe9e1">⬇️</span><div class="grow"><b>Spending</b><span class="mini">3 of 5 categories at limit</span></div><b>R$ 1,412</b></div>
+      <div class="it"><span class="ico" style="background:#eeedfb">💳</span><div class="grow"><b>Card bill</b><span class="mini">Paid in full · no interest</span></div><b>R$ 412</b></div>
+      <div class="it"><span class="ico" style="background:#fff4d9">🎯</span><div class="grow"><b>Goals</b><span class="mini">2 on track, 1 behind</span></div><b>R$ 260</b></div>
+    </div>
+    <div class="sec"><h3>Your life plan</h3></div>
+    <div class="card list">
+      <div class="it"><span class="ico" style="background:#f4f3ef">🏠</span><div class="grow"><b>Move out of my parents' place</b><span class="mini">2028</span></div><span class="chip ok">on track</span></div>
+      <div class="it"><span class="ico" style="background:#f4f3ef">🌎</span><div class="grow"><b>Study abroad</b><span class="mini">2029</span></div><span class="chip warn">needs attention</span></div>
+      <div class="it"><span class="ico" style="background:#f4f3ef">🚗</span><div class="grow"><b>First car</b><span class="mini">2030</span></div><span class="chip">not started</span></div>
+    </div>
+  </div>`;
+},
+family(){
+  return `<div class="pad">
+    ${backBtn('home')}
+    <h2 style="margin:0 0 4px;font-size:22px">Family mode</h2>
+    <p class="mini" style="margin:0 0 14px">For guardians who want to open the first account for someone under 18.</p>
+    <div class="card grad"><div class="lbl">Guardian view</div><div style="font-weight:800;font-size:17px;margin:6px 0">Julia's account, 15</div><div class="row between" style="margin-top:6px"><span style="opacity:.85">Weekly allowance via Pix</span><b>R$ 50</b></div></div>
+    <div class="card list">
+      <div class="it"><span class="ico" style="background:#eeedfb">🔁</span><div class="grow"><b>Automatic allowance</b><span class="mini">Scheduled Pix every Friday</span></div><span class="chip ok">active</span></div>
+      <div class="it"><span class="ico" style="background:#ffe9e1">💳</span><div class="grow"><b>Prepaid debit card</b><span class="mini">She designs it; you set the limits</span></div><span class="chip brand">view</span></div>
+      <div class="it"><span class="ico" style="background:#fff4d9">🎯</span><div class="grow"><b>Julia's goal</b><span class="mini">New headphones · 60%</span></div><span class="chip brand">view</span></div>
+      <div class="it"><span class="ico" style="background:#dff5ee">🔒</span><div class="grow"><b>Limits and blocks</b><span class="mini">Online purchases up to R$ 100</span></div><span class="chip">edit</span></div>
+      <div class="it"><span class="ico" style="background:#f4f3ef">📚</span><div class="grow"><b>Money skills track</b><span class="mini">3 of 8 missions completed</span></div><span class="chip">view</span></div>
+    </div>
+    <div class="card nudge"><b style="font-size:14px">At 18, the account becomes hers</b><div class="mini" style="margin-top:4px">History, goals and the AI stay with Julia. The relationship with the bank starts before the first choice. A credit card would only be offered from 18, subject to credit policy.</div></div>
+    <button class="btn" onclick="toast('Dependent account opening is out of scope')">Open an account for my child</button>
+  </div>`;
+},
+more(){
+  return `<div class="pad">
+    <h2 style="margin:6px 0 14px;font-size:22px">More</h2>
+    <div class="card list">
+      <div class="it" style="cursor:pointer" data-go="chat"><span class="ico" style="background:#eeedfb">💬</span><div class="grow"><b>Instant help</b><span class="mini">The AI solves it or hands you to a person, without repeating your story</span></div>›</div>
+      <div class="it" style="cursor:pointer" data-go="card"><span class="ico" style="background:#ffe9e1">💳</span><div class="grow"><b>Card</b><span class="mini">Bill, controls and studio</span></div>›</div>
+      <div class="it" style="cursor:pointer" data-go="invest"><span class="ico" style="background:#dff5ee">📈</span><div class="grow"><b>Invest</b><span class="mini">First investment and simulator</span></div>›</div>
+      <div class="it"><span class="ico" style="background:#dff5ee">🔐</span><div class="grow"><b>Privacy and data</b><span class="mini">Choose what the AI may use</span></div></div>
+      <div style="padding:4px 0 8px 46px">
+        ${[['Transactions in this account',true],['Goals and profile',true],['Card purchases',true],['Data from other banks (Open Finance)',false],['Location for offers',false]].map(d=>`<label class="row between" style="padding:6px 0;font-size:13.5px"><span>${d[0]}</span><input type="checkbox" ${d[1]?'checked':''} style="accent-color:var(--brand);width:18px;height:18px" onchange="toast(this.checked?'Permission granted':'Permission removed')"></label>`).join('')}
+      </div>
+      <div class="it" style="cursor:pointer" data-go="family"><span class="ico" style="background:#ffe9e1">👪</span><div class="grow"><b>Family mode</b><span class="mini">Dependent accounts</span></div>›</div>
+      <div class="it" style="cursor:pointer" data-go="review"><span class="ico" style="background:#fff4d9">🗓️</span><div class="grow"><b>Monthly reviews</b><span class="mini">Past summaries</span></div>›</div>
+      <div class="it" style="cursor:pointer" data-restart><span class="ico" style="background:#f4f3ef">↺</span><div class="grow"><b>Restart prototype</b><span class="mini">Back to the welcome screen</span></div>›</div>
+    </div>
+    <p class="mini" style="text-align:center">Concept prototype · fictitious data</p>
+  </div>`;
+}
+};
+
+/* studio tabs */
+function studioTab(tab){
+  const c=S.card;
+  if(tab==='look') return `
+    <div class="ctl"><span class="lbl">Color</span><div class="swatches">${Object.entries(THEMES).map(([k,[a,b]])=>`<button class="sw ${c.theme===k?'on':''}" data-theme-pick="${k}" title="${k}" style="background:linear-gradient(135deg,${a},${b})"></button>`).join('')}</div></div>
+    <div class="ctl"><span class="lbl">Pattern</span><div class="seg">${Object.keys(PATTERNS).map(k=>`<button data-pattern="${k}" class="${c.pattern===k?'on':''}">${k[0].toUpperCase()+k.slice(1)}</button>`).join('')}</div></div>
+    <div class="ctl"><span class="lbl">Orientation</span><div class="seg"><button data-orient="h" class="${c.orient==='h'?'on':''}">Horizontal</button><button data-orient="v" class="${c.orient==='v'?'on':''}">Vertical</button></div></div>
+    <div class="ctl"><span class="lbl">Sticker</span><div class="stk">${STICKERS.map(s=>`<button data-sticker="${s}" class="${c.sticker===s?'on':''}">${s}</button>`).join('')}</div></div>`;
+  if(tab==='text') return `
+    <div class="ctl"><span class="lbl">Card nickname (shown only to you)</span><input class="field" id="f-nick" maxlength="18" value="${esc(c.nick)}" placeholder="e.g. Weekend card"></div>
+    <div class="ctl"><span class="lbl">Name printed on the card</span><input class="field" id="f-holder" maxlength="22" value="${esc(c.holder)}">
+      <div class="seg" style="margin-top:8px">
+        <button data-holder="${S.name.toUpperCase()} ${S.surname.toUpperCase()}">Full name</button>
+        <button data-holder="${S.name.toUpperCase()} ${S.surname[0].toUpperCase()}.">Short</button>
+        <button data-holder="${S.name.toUpperCase()}">First name</button>
+      </div>
+      <p class="mini" style="margin:8px 0 0">The printed name must match your legal name or a version of it.</p></div>`;
+  return `
+    <div class="ctl"><span class="lbl">My spending cap</span>
+      <div class="card" style="margin:0">
+        <div class="row between"><b>Personal cap</b><b id="capv">${fmt(c.cap)}</b></div>
+        <input type="range" min="100" max="${APPROVED}" step="50" value="${c.cap}" id="f-cap">
+        <div class="row between mini"><span>R$ 100</span><span>Approved limit ${fmt(APPROVED)}</span></div>
+        <p class="mini" style="margin:8px 0 0">Purchases above your cap are declined, even if the bank approved more.</p>
+      </div></div>
+    <div class="ctl"><span class="lbl">Where the card works</span>
+      <div class="card list" style="margin:0">
+        ${tg('online','Online purchases','Apps, websites and subscriptions')}
+        ${tg('intl','International purchases','Off by default; turn on before a trip')}
+        ${tg('contactless','Contactless','Tap to pay on transport and in shops')}
+      </div></div>
+    <div class="ctl"><span class="lbl">Smart habits</span>
+      <div class="card list" style="margin:0">
+        ${tg('autopay','Auto-pay the full bill','From your account on the due date; avoids interest')}
+        ${tg('roundup','Round-ups to my goal','Rounds each purchase to the next real and saves it to "Trip with friends"')}
+      </div></div>`;
+}
+function refreshPreview(){
+  const p=document.getElementById('ccPreview'); if(!p) return;
+  p.style.minHeight=S.card.orient==='v'?'318px':'208px';
+  p.innerHTML=cardHTML();
+}
+function rerender(){ const st=app.scrollTop; app.innerHTML=SCREENS[S.screen](); app.scrollTop=st; bindScreen(); }
+
+/* ============ chat ============ */
+const CHAT = {
+  start:{bot:()=>[`Hi ${S.name}! ${prof().ins}`,'Tell me: what worries you most about money right now?'],
+    qr:[["Honestly, I don't know where to start",'s1'],['I want to save for a trip','s2'],['I spend too much on delivery','s3'],['How does my card bill work?','s4']]},
+  s1:{bot:()=>["That's fine, that's exactly where we start. 🙂",'I looked at your last 3 months: your money lands around the 5th and your balance usually hits zero near the 25th. Not much is left, but something is.','Proposal: set aside 10% as soon as your money lands, before spending. Shall we start with your emergency fund?'],
+    qr:[['Sure, do it for me','plan_safety'],['10% is too much for me','s1b']]},
+  s1b:{bot:()=>['Fair. How about 5%? What matters now is building the habit, not the amount.'],qr:[['Ok, 5% then','plan_safety'],['I want to understand it better first','edu']]},
+  s2:{bot:()=>['Nice! The trip with your friends is already one of your goals: R$ 660 of R$ 1,920 (34%).','If you set aside R$ 160 when your money lands, you get there in June, one month early.'],
+    qr:[['Yes, do that','plan_trip'],["I'd rather do R$ 100",'plan_trip_low']]},
+  s3:{bot:()=>["I see it: delivery is at 86% of your limit and the peak is Friday night. That's really common, don't beat yourself up.",'I can send you a reminder at 7 pm on Fridays with how much is left for the month. Want it?'],
+    qr:[['Yes, remind me','done_rem'],['Show me my limits','go_limits']]},
+  s4:{bot:()=>[`Your current bill is R$ 486.30, it closes on Nov 3 and is due on Nov 10.`,'If you pay it in full, you pay zero interest. If you pay only the minimum, the rest becomes revolving credit, which in Brazil is one of the most expensive forms of credit.',`Auto-pay in full is ${S.card.autopay?'already on, so you are covered':'off. Want me to turn it on?'}.`],
+    qr:S.card.autopay?[['Show me my card','go_card'],['Thanks!','end']]:[['Turn it on','autopay_on'],['Show me my card','go_card']]},
+  autopay_on:{bot:()=>['Done ✅ Auto-pay in full is on. I will remind you 2 days before the due date to make sure there is enough balance.'],qr:[['Show me my card','go_card'],['Thanks!','end']],act:'autopay'},
+  edu:{bot:()=>['Sure. An emergency fund is money kept somewhere safe that you can withdraw anytime, for the unexpected.','The rule of thumb is 3 to 6 months of expenses, but you can start with much less. Want to see how investing that money works?'],
+    qr:[['Show me','go_invest'],['Got it, create it','plan_safety']]},
+  plan_safety:{bot:()=>['Done! ✅'],card:'Emergency fund · scheduled Pix on the day your money lands. You can pause it anytime.',
+    after:["I'll tell you how it went in a week. Deal?"],qr:[['Deal!','end'],['See my goals','go_goals']]},
+  plan_trip:{bot:()=>['Done! ✅'],card:'Trip with friends · R$ 160 a month · automatic transfer on the 5th, plus card round-ups.',after:["I'll let you know when you pass 50%. 🎉"],qr:[['See my goals','go_goals'],['Thanks!','end']],act:'trip160'},
+  plan_trip_low:{bot:()=>['Done! ✅'],card:'Trip with friends · R$ 100 a month · automatic transfer on the 5th. Forecast: October.',after:["If there's money left at the end of the month, I'll ask whether you want to top up."],qr:[['See my goals','go_goals'],['Thanks!','end']],act:'trip100'},
+  done_rem:{bot:()=>['Done, reminder set for Fridays at 7 pm. 🔔','No scolding: just so you decide with the information in hand.'],qr:[['Show me my limits','go_limits'],['Thanks!','end']]},
+  end:{bot:()=>["I'm here. Ask me anything, the way you'd ask a friend."],qr:[['Restart conversation','restart']]}
+};
+const FREE = [
+  [/card|bill|interest|freeze|limit increase|credit/i,'I can help with your card: bill, interest, freezing it or changing its design and rules. Want to see it?','go_card'],
+  [/design|color|colour|custom|personali/i,'You can design your card in the card studio: color, pattern, sticker, printed name and your own rules.','go_studio'],
+  [/invest|return|yield|savings account/i,'I can show you the first-investment simulator. It explains liquidity, risk and time horizon before any suggestion.','go_invest'],
+  [/fee|charge|cost/i,'In this concept, the basic package has no fees for Pix, transfers, the account or the digital card. If any product has a cost, I tell you upfront, in plain language.'],
+  [/goal|save|saving|trip/i,"Let's do it! Tell me the goal and the deadline, and I'll work out how much to set aside each month.",'go_goals']
+];
+function chatInit(){
+  const box=document.getElementById('msgs'); if(!box) return;
+  box.innerHTML='';
+  if(S.chatLog.length===0) runStep('start');
+  else { S.chatLog.forEach(m=>appendMsg(m,false)); renderQR(CHAT[S.chatStep]?.qr||[]); }
+  const send=()=>{const v=document.getElementById('cin').value.trim(); if(!v) return; document.getElementById('cin').value=''; freeText(v);};
+  document.getElementById('csend').onclick=send;
+  document.getElementById('cin').onkeydown=e=>{if(e.key==='Enter') send();};
+}
+function appendMsg(m,log=true){
+  const box=document.getElementById('msgs'); if(!box) return;
+  const d=document.createElement('div'); d.className='m '+m.who; d.innerHTML=m.html; box.appendChild(d); box.scrollTop=box.scrollHeight;
+  if(log) S.chatLog.push(m);
+}
+function typing(cb,ms=650){
+  const box=document.getElementById('msgs'); if(!box) return;
+  const t=document.createElement('div'); t.className='typing'; t.innerHTML='<i></i><i></i><i></i>';
+  box.appendChild(t); box.scrollTop=box.scrollHeight;
+  setTimeout(()=>{t.remove(); if(document.getElementById('msgs')) cb();},ms);
+}
+function renderQR(list){ const qr=document.getElementById('qr'); if(qr) qr.innerHTML=list.map(([t,n])=>`<button data-next="${n}">${t}</button>`).join(''); }
+function runStep(id){
+  if(id==='restart'){S.chatLog=[];S.chatStep='start';chatInit();return;}
+  const jumps={go_goals:'goals',go_limits:'limits',go_invest:'invest',go_card:'card',go_studio:'studio'};
+  if(jumps[id]){go(jumps[id]);return;}
+  const st=CHAT[id]; S.chatStep=id; renderQR([]);
+  if(st.act==='autopay') S.card.autopay=true;
+  if(st.act==='trip160') S.goals[0].by='Jun 2027';
+  if(st.act==='trip100') S.goals[0].by='Oct 2027';
+  const q=st.bot().map(h=>({who:'bot',html:h}));
+  if(st.card) q.push({who:'card-m',html:`<div class="lbl" style="color:var(--accent)">Plan created</div><div style="font-weight:700;margin-top:4px">${st.card}</div>`});
+  if(st.after) st.after.forEach(h=>q.push({who:'bot',html:h}));
+  (function next(){ if(!q.length){renderQR(st.qr||[]);return;} const m=q.shift(); typing(()=>{appendMsg(m); next();}, m.who==='card-m'?400:600+Math.min(900,m.html.length*5)); })();
+}
+function freeText(v){
+  appendMsg({who:'me',html:esc(v)}); renderQR([]);
+  const hit=FREE.find(f=>f[0].test(v));
+  typing(()=>{
+    if(hit){ appendMsg({who:'bot',html:hit[1]}); renderQR(hit[2]?[['Yes, show me',hit[2]],['Something else','start']]:[['Back to suggestions','start']]); }
+    else { appendMsg({who:'bot',html:'In this prototype I understand a few topics (card, investing, fees, goals). Try one of those or use the suggestions below.'}); renderQR(CHAT.start.qr); }
+  },800);
+}
+
+/* ============ router ============ */
+function go(id){
+  S.screen=id;
+  app.innerHTML=SCREENS[id]();
+  app.scrollTop=0;
+  nav.style.display=(id==='welcome'||id==='profile')?'none':'flex';
+  const navMap={studio:'card'};
+  nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.go===(navMap[id]||id)));
+  document.querySelectorAll('#flowList button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
+  renderPanel(id);
+  bindScreen();
+}
+function bindScreen(){
+  if(S.screen==='chat') chatInit();
+  if(S.screen==='invest'){
+    const upd=()=>{
+      S.invest.mo=+document.getElementById('sl-m').value; S.invest.yrs=+document.getElementById('sl-a').value;
+      const {mo,yrs}=S.invest,n=yrs*12,i=Math.pow(1.10,1/12)-1,fv=mo*((Math.pow(1+i,n)-1)/i);
+      document.getElementById('sv-m').textContent=fmt(mo);
+      document.getElementById('sv-a').textContent=yrs+(yrs>1?' years':' year');
+      document.getElementById('sv-ap').textContent=fmt(mo*n);
+      document.getElementById('sv-fv').textContent=fmt(fv);
+      document.getElementById('inv-cta').textContent='Start with '+fmt(mo);
+    };
+    ['sl-m','sl-a'].forEach(id=>document.getElementById(id).oninput=upd);
+  }
+  if(S.screen==='studio'){
+    const nick=document.getElementById('f-nick'), holder=document.getElementById('f-holder'), cap=document.getElementById('f-cap');
+    if(nick) nick.oninput=()=>{S.card.nick=nick.value; refreshPreview();};
+    if(holder) holder.oninput=()=>{S.card.holder=holder.value.toUpperCase().replace(/[^A-Z .'-]/g,''); holder.value=S.card.holder; refreshPreview();};
+    if(cap) cap.oninput=()=>{S.card.cap=+cap.value; document.getElementById('capv').textContent=fmt(S.card.cap);};
+  }
+  document.querySelectorAll('[data-cardtg]').forEach(i=>i.onchange=()=>{
+    S.card[i.dataset.cardtg]=i.checked;
+    const msg={online:'Online purchases',intl:'International purchases',contactless:'Contactless',autopay:'Auto-pay in full',roundup:'Round-ups'}[i.dataset.cardtg];
+    toast(msg+(i.checked?' on':' off'));
+  });
+}
+function renderPanel(id){
+  const p=PANEL[id], el=document.getElementById('panel');
+  const idx=FLOW.findIndex(f=>f.id===id)+1, prev=FLOW[idx-2], next=FLOW[idx];
+  el.innerHTML=`<h4>Screen ${idx} of ${FLOW.length}</h4><h2>${p.h}</h2><p class="sub">${p.s}</p>
+    <div class="pblock"><h4>Why this screen exists</h4><p>${p.why}</p></div>
+    <div class="pblock"><h4>Evidence</h4>${p.ev.map(e=>`<div class="ev"><div class="n">${e[0]}</div><div>${e[1]}</div></div>`).join('')}<p class="src">${SRC}</p></div>
+    <div class="pblock"><h4>Hypothesis to validate</h4><p>${p.hip}</p></div>
+    <div class="pblock"><h4>Pilot KPIs</h4>${p.kpi.map(k=>`<span class="kpi">${k}</span>`).join('')}</div>
+    <div class="pblock row between">
+      <button class="btn sm ghost" style="background:var(--bg);color:var(--ink);${prev?'':'opacity:.4'}" ${prev?`data-go="${prev.id}"`:'disabled'}>← Previous</button>
+      <button class="btn sm" style="${next?'':'opacity:.4'}" ${next?`data-go="${next.id}"`:'disabled'}>Next →</button></div>`;
+}
+
+/* ============ events ============ */
+document.getElementById('flowList').innerHTML = FLOW.map((f,i)=>`<li><button data-go="${f.id}"><b>${i+1}</b>${f.t}${f.n?'<span class="new">NEW</span>':''}</button></li>`).join('');
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-go],[data-profile],[data-obj],[data-next],[data-why],[data-add],[data-newgoal],[data-dismiss],[data-restart],[data-reset-profile],[data-cardact],[data-stab],[data-theme-pick],[data-pattern],[data-orient],[data-sticker],[data-holder],[data-savecard],[data-resetcard]');
+  if(!t) return;
+  const d=t.dataset;
+  if(d.go!==undefined){ if(d.go) go(d.go); return; }
+  if(d.profile){ S.profile=d.profile; S.name=d.profile==='minor'?'Leo':'Ana'; S.surname=d.profile==='minor'?'Lima':'Souza'; S.card.holder=(S.name+' '+S.surname).toUpperCase(); go('profile'); return; }
+  if(d.obj){ S.objective=d.obj; go('profile'); return; }
+  if(d.next){ if(!/^go_/.test(d.next)&&d.next!=='restart') appendMsg({who:'me',html:t.textContent}); runStep(d.next); return; }
+  if(d.why){ document.getElementById('why-'+d.why)?.classList.toggle('on'); return; }
+  if(d.add){ const g=S.goals.find(x=>x.id===d.add); g.cur+=50; rerender(); toast('R$ 50 added to "'+g.name+'"'); return; }
+  if(t.hasAttribute('data-newgoal')){ if(!S.goals.find(g=>g.id==='fest')) S.goals.push({id:'fest',e:'🎤',name:'Festival ticket',cur:0,target:800,by:'Apr 2027'}); rerender(); toast('Goal created. The AI suggests R$ 115 a month.'); return; }
+  if(t.hasAttribute('data-dismiss')){ t.closest('.card').style.opacity=.35; toast("Got it. We'll show fewer offers like this."); return; }
+  if(t.hasAttribute('data-restart')){ Object.assign(S,{profile:null,objective:null,chatLog:[],chatStep:'start',name:'Ana',surname:'Souza',stab:'look'}); S.card=JSON.parse(JSON.stringify(DEFAULT_CARD)); go('welcome'); return; }
+  if(t.hasAttribute('data-reset-profile')){ S.profile=null;S.objective=null; go('profile'); return; }
+  if(d.cardact){
+    if(d.cardact==='freeze'){ S.card.frozen=!S.card.frozen; rerender(); toast(S.card.frozen?'Card frozen. Unfreeze anytime.':'Card unfrozen'); }
+    if(d.cardact==='reveal'){ S.card.reveal=!S.card.reveal; rerender(); }
+    if(d.cardact==='virtual'){ toast('Virtual card for subscriptions created (illustrative)'); }
+    return;
+  }
+  if(d.stab){ S.stab=d.stab; rerender(); return; }
+  if(d.themePick){ S.card.theme=d.themePick; rerender(); return; }
+  if(d.pattern){ S.card.pattern=d.pattern; rerender(); return; }
+  if(d.orient){ S.card.orient=d.orient; rerender(); return; }
+  if(d.sticker){ S.card.sticker=d.sticker; rerender(); return; }
+  if(d.holder){ S.card.holder=d.holder; rerender(); return; }
+  if(t.hasAttribute('data-savecard')){ go('card'); toast('Your card is saved and ready to use ✨'); return; }
+  if(t.hasAttribute('data-resetcard')){ const keep={holder:S.card.holder}; S.card=Object.assign(JSON.parse(JSON.stringify(DEFAULT_CARD)),keep); rerender(); toast('Card reset to default'); return; }
+});
+const DEFAULT_CARD = JSON.parse(JSON.stringify(S.card));
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('themeBtn').onclick=()=>{
+  const r=document.documentElement; const cur=r.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  r.dataset.theme = cur==='dark'?'light':'dark';
+};
+go('welcome');
+</script>
+</body>
+</html>
